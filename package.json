@@ -1,0 +1,18 @@
+{
+  "name": "react-express-dialogflow-example",
+  "version": "1.0.0",
+  "description": "React Bot for Example",
+  "main": "index.js",
+  "engines": {
+    "node": "12.16.3",
+    "npm": "6.14.4"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Noby Fujioka",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
