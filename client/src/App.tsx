@@ -4,7 +4,7 @@ import './App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
+    <div style={{ textAlign: 'center' }}>
       <h1>Chatbot Example With Dialogflow</h1>
       <ChatBox />
     </div>

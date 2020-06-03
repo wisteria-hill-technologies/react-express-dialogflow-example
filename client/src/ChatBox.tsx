@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from "react";
-
+import React, { useState, useEffect, useRef } from "react";
 
 interface Msg {
     message?: string
@@ -15,6 +14,8 @@ interface Message {
 }
 
 const ChatBox: React.FC = () => {
+    const [ value, setValue ] = useState<string>('');
+    const inputRef = useRef<HTMLInputElement>(null);
     const [ messages, setMessages ] = useState<Message[]>([]);
 
     const df_text_query = async(text: string) => {
@@ -56,26 +57,27 @@ const ChatBox: React.FC = () => {
         const res = df_event_query('Welcome');
     }, []);
 
-    const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const newEvent = e;
-        if(newEvent.key === 'Enter') {
-            const res = df_text_query(newEvent.currentTarget.value);
+    const handleInputKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        e.persist();
+        if(e.key === 'Enter') {
+            const res = await df_text_query(value);
+            setValue('');
+            if (inputRef.current) inputRef.current.scrollIntoView();
         }
     };
 
     return (
-        <div>
+        <div
+            style={{ height: '100%', width: '100%', overflow: 'auto' }}
+        >
             <h2>ChatBox</h2>
-            <input
-                onKeyPress={handleInputKeyPress}
-            />
             <div>
                 {
                     messages
                     && messages.length > 0
                     && messages.map(({ speak, msg }, index) => {
                         return (
-                            <div key={index} style={{ margin: '10px', padding: '10px', border: '1px solid black'}}>
+                            <div key={index} style={styles.messageWrapper}>
                                 {speak}: {msg.text.text}
                             </div>
                         )
@@ -83,8 +85,25 @@ const ChatBox: React.FC = () => {
 
                 }
             </div>
+            <input
+                ref={inputRef}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onKeyPress={handleInputKeyPress}
+            />
         </div>
     );
 };
+
+const styles = {
+    messageWrapper: {
+        margin: 'auto',
+        marginBottom: '1rem',
+        padding: '1rem',
+        backgroundColor: 'palegreen',
+        width: 'fit-content',
+        borderRadius: '1rem'
+    }
+}
 
 export default ChatBox;
